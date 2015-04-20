@@ -154,7 +154,7 @@ Checks whether the directory contains an entry (file, link or directory):
 
 ```
 must.contain(entry : string)
-must.contain(txt : string, msg : string)
+must.contain(entry : string, msg : string)
 ```
 
 #### must.not.contain()
@@ -162,6 +162,6 @@ must.contain(txt : string, msg : string)
 Checks whether the directory doesn't contain an entry (file, link or directory):
 
 ```
-must.not.contain(txt : string)
-must.not.contain(txt : string, msg : string)
+must.not.contain(entry : string)
+must.not.contain(entry : string, msg : string)
 ```
