@@ -1,5 +1,5 @@
 //imports
-const justo = require("justo-assert-file");
+const justo = require("../../dist/es5/nodejs/justo-assert-file");
 const file = justo.file;
 const dir = justo.dir;
 

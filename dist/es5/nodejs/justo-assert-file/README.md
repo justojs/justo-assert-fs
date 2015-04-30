@@ -1,8 +1,8 @@
-# justo-assert-file
+[![Build Status](https://travis-ci.org/JustoJS/justo-assert-file.svg)](https://travis-ci.org/JustoJS/justo-assert-file)
 
 An assertion library for files.
 
-Proudly made in Valencia, Spain, EU.
+*Proudly made in Valencia, Spain, EU.*
 
 Features:
 
