@@ -1,6 +1,6 @@
 {
   "name": "justo-assert-file",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An assertion library for files.",
   "homepage": "http://www.justojs.org",
   "license": "MIT",
@@ -17,15 +17,27 @@
     }
   ],
   "keywords": [
+    "assert",
+    "assert file",
+    "Assertion test",
+    "Assertion testing",
+    "Browser test",
+    "Browser testing",
+    "io.js test",
+    "io.js testing",
+    "JavaScript test",
+    "JavaScript testing",
     "Justo",
     "Justo.js",
-    "Node.js assert",
-    "Node.js assertion",
-    "assert",
-    "assertion",
-    "file assert",
-    "file assertion",
-    "assert file"
+    "justo-assert",
+    "Node test",
+    "Node testing",
+    "Node.js test",
+    "Node.js testing",
+    "Test",
+    "Testing",
+    "Unit test",
+    "Unit testing"
   ],
   "bugs": {
     "url": "https://github.com/JustoJS/justo-assert-file/issues",
@@ -38,7 +50,10 @@
   "engines": {
     "node": ">=0.12.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "deep-equal": "^1.0.0",
+    "jsonfile": "^2.0.0"
+  },
   "peerDependencies": {},
   "devDependencies": {
     "grunt": "^0.4.5",

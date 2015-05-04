@@ -69,7 +69,7 @@ module.exports = function(grunt) {
         options: {
         	jshintrc: true,
           ignores: [
-            "test/mocha.opts"
+            "test/unit/data/*",
           ]
         },
 

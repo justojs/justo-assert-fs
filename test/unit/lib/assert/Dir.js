@@ -2,7 +2,7 @@
 const fs = require("fs");
 const os= require("os");
 const path = require("path");
-const dir = require("../../../dist/es5/nodejs/justo-assert-file").dir;
+const dir = require("../../../../dist/es5/nodejs/justo-assert-file").dir;
 
 //suite
 describe("Dir", function() {

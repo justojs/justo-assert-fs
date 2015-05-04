@@ -255,6 +255,7 @@ var DirMustNot = (function (_DirMustBase2) {
 
 //imports
 var fs = require("fs");
+var jsonfile = require("jsonfile");
 var assert = require("assert");
 
 /**
@@ -556,8 +557,10 @@ var FileMustBe = (function (_FileMustBase3) {
       }
 
       //(2) check
-      if (fs.readFileSync(this.filePath, { encoding: "utf8" }) != text) {
-        throw new AssertionError("'" + this.filePath + "' content must be equal to '" + text + "'.", msg);
+      con = fs.readFileSync(this.filePath, "utf8");
+
+      if (con != text) {
+        throw new AssertionError("'" + this.filePath + "' content must be equal to '" + text + "'. Read: '" + con + "'.", msg);
       }
     }
   }, {
@@ -608,7 +611,7 @@ var FileMustBe = (function (_FileMustBase3) {
 
       //(2) read file
       try {
-        con = require(this.filePath);
+        con = jsonfile.readFileSync(this.filePath);
       } catch (e) {
         throw new AssertionError("'" + this.filePath + "' must be a JSON file.", msg);
       }
@@ -708,7 +711,7 @@ var MustNotBe = (function (_FileMustBase4) {
         var con = undefined;
 
         try {
-          con = require(this.filePath);
+          con = jsonfile.readFileSync(this.filePath);
 
           if (!obj) {
             throw new AssertionError("'" + this.filePath + "' must not be a JSON file.", msg);
@@ -716,7 +719,7 @@ var MustNotBe = (function (_FileMustBase4) {
             try {
               assert.notDeepEqual(con, obj);
             } catch (e) {
-              throw new AssertionError("`${this.filePath}` must not be a JSON object '${obj}'.", msg);
+              throw new AssertionError("'" + this.filePath + "' must not be a JSON object '" + obj + "'.", msg);
             }
           }
         } catch (e) {

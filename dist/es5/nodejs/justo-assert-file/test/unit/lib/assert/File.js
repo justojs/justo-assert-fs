@@ -1,12 +1,10 @@
 //imports
-const fs = require("fs");
-const os = require("os");
 const path = require("path");
-const file = require("../../../dist/es5/nodejs/justo-assert-file").file;
+const file = require("../../../../dist/es5/nodejs/justo-assert-file").file;
 
 //suite
 describe("File", function() {
-  const DIR = os.tmpdir();
+  const DIR = "test/unit/data";
   const FILE_NAME = "myfile.txt";
   const JSON_FILE_NAME = "myfile.json";
   const FILE_PATH = path.join(DIR, FILE_NAME);
@@ -15,25 +13,15 @@ describe("File", function() {
   const SUBDIR_PATH = path.join(DIR, SUBDIR_NAME);
   const CONTENT = "En un lugar de la Mancha,\n" +
                   "de cuyo nombre no quiero acordarme,\n" +
-                  "no hace mucho tiempo que vivía un hidalgo de los de lanza en astillero," +
+                  "no hace mucho tiempo que vivía un hidalgo de los de lanza en astillero,\n" +
                   "adarga antigua,\n" +
-                  "rocín flaco y galgo corredor.";
+                  "rocín flaco y galgo corredor.\n";
   const JSON_OBJECT = {x: 1, y: 1};
-  const JSON_CONTENT = JSON.stringify(JSON_OBJECT);
   var f, jf;
 
   beforeEach(function() {
-    fs.writeFileSync(FILE_PATH, CONTENT, {encoding: "utf8"});
-    fs.writeFileSync(JSON_FILE_PATH, JSON_CONTENT, {encoding: "utf8"});
-    fs.mkdirSync(SUBDIR_PATH);
     f = file(DIR, FILE_NAME);
     jf = file(DIR, JSON_FILE_NAME);
-  });
-
-  afterEach(function() {
-    fs.unlinkSync(FILE_PATH);
-    fs.unlinkSync(JSON_FILE_PATH);
-    fs.rmdirSync(SUBDIR_PATH);
   });
 
   describe("#constructor()", function() {
