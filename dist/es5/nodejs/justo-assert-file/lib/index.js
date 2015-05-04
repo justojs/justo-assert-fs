@@ -256,7 +256,7 @@ var DirMustNot = (function (_DirMustBase2) {
 //imports
 var fs = require("fs");
 var jsonfile = require("jsonfile");
-var assert = require("assert");
+var deepEqual = require("deep-equal");
 
 /**
  * A wrapper file.
@@ -618,9 +618,7 @@ var FileMustBe = (function (_FileMustBase3) {
 
       //(2) check
       if (obj) {
-        try {
-          assert.deepEqual(con, obj);
-        } catch (e) {
+        if (!deepEqual(con, obj)) {
           throw new AssertionError("'" + this.filePath + "' must be the JSON object '" + obj + "'.", msg);
         }
       }
@@ -716,9 +714,7 @@ var MustNotBe = (function (_FileMustBase4) {
           if (!obj) {
             throw new AssertionError("'" + this.filePath + "' must not be a JSON file.", msg);
           } else {
-            try {
-              assert.notDeepEqual(con, obj);
-            } catch (e) {
+            if (deepEqual(con, obj)) {
               throw new AssertionError("'" + this.filePath + "' must not be a JSON object '" + obj + "'.", msg);
             }
           }
