@@ -256,7 +256,7 @@ var DirMustNot = (function (_DirMustBase2) {
 //imports
 var fs = require("fs");
 var jsonfile = require("jsonfile");
-var deepEqual = require("deep-equal");
+var jsyaml = require("js-yaml");
 
 /**
  * A wrapper file.
@@ -293,6 +293,68 @@ var File = (function () {
       } catch (e) {
         return false;
       }
+    }
+  }, {
+    key: "yaml",
+
+    /**
+     * The file content when this is a YAML file.
+     *
+     * @type object
+     */
+    get: function () {
+      var con;
+
+      //(1) get con
+      try {
+        con = jsyaml.safeLoad(fs.readFileSync(this.path, "utf8"));
+      } catch (e) {}
+
+      if (typeof con != "object") throw new AssertionError("'" + this.path + "' must be a YAML file.");
+
+      //(2) return
+      return con;
+    }
+  }, {
+    key: "yml",
+
+    /**
+     * @alias yaml
+     */
+    get: function () {
+      return this.yaml;
+    }
+  }, {
+    key: "json",
+
+    /**
+     * The file content when this is a JSON file.
+     *
+     * @type json
+     */
+    get: function () {
+      var con;
+
+      //(1) get
+      try {
+        con = jsonfile.readFileSync(this.path);
+      } catch (e) {
+        throw new AssertionError("'" + this.path + "' must be a JSON file.");
+      }
+
+      //(2) return
+      return con;
+    }
+  }, {
+    key: "text",
+
+    /**
+     * The file content.
+     *
+     * @type string
+     */
+    get: function () {
+      return fs.readFileSync(this.path, "utf8");
     }
   }]);
 
@@ -408,7 +470,7 @@ var FileMust = (function (_FileMustBase) {
       }
 
       //(3) check
-      con = fs.readFileSync(this.filePath, { encoding: "utf8" });
+      con = fs.readFileSync(this.filePath, "utf8");
 
       for (var i = 0; i < txts.length; ++i) {
         var txt = txts[i];
@@ -493,7 +555,7 @@ var FileMustNot = (function (_FileMustBase2) {
 
       //(2) check
       if (this.file.exists()) {
-        var con = fs.readFileSync(this.filePath, { encoding: "utf8" });
+        var con = fs.readFileSync(this.filePath, "utf8");
 
         for (var i = 0; i < txts.length; ++i) {
           var txt = txts[i];
@@ -582,46 +644,50 @@ var FileMustBe = (function (_FileMustBase3) {
     /**
      * Checks whether a file is a JSON file.
      *
-     * @overload Whether a file is a JSON file.
-     * @param [msg]:string  The assertion message.
-     *
-     * @overload Whether a file is a JSON file and its object is a given one.
-     * @param obj:object    The object to check.
      * @param [msg]:string  The assertion message.
      */
-    value: function json() {
+    value: function json(msg) {
+      if (!this.file.exists()) {
+        throw new AssertionError("'" + this.filePath + "' must exist.", msg);
+      } else {
+        try {
+          var con = this.file.json;
+        } catch (e) {
+          throw new AssertionError(e.message, msg);
+        }
+      }
+    }
+  }, {
+    key: "yaml",
+
+    /**
+     * Checks whether a file is a YAML file.
+     *
+     * @param [msg]:string  The assertion message.
+     */
+    value: function yaml(msg) {
+      if (!this.file.exists()) {
+        throw new AssertionError("'" + this.filePath + "' must exist.", msg);
+      } else {
+        try {
+          var con = this.file.yaml;
+        } catch (e) {
+          throw new AssertionError(e.message, msg);
+        }
+      }
+    }
+  }, {
+    key: "yml",
+
+    /**
+     * @alias yaml()
+     */
+    value: function yml() {
       for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         args[_key4] = arguments[_key4];
       }
 
-      var obj, msg, con;
-
-      //(1) arguments
-      if (args.length == 1) {
-        if (typeof args[0] == "string") msg = args[0];else obj = args[0];
-      } else if (args.length > 1) {
-        obj = args[0];
-        msg = args[1];
-      }
-
-      //(2) does file exist?
-      if (!this.file.exists()) {
-        throw new AssertionError("'" + this.filePath + "' must exist.", msg);
-      }
-
-      //(2) read file
-      try {
-        con = jsonfile.readFileSync(this.filePath);
-      } catch (e) {
-        throw new AssertionError("'" + this.filePath + "' must be a JSON file.", msg);
-      }
-
-      //(2) check
-      if (obj) {
-        if (!deepEqual(con, obj)) {
-          throw new AssertionError("'" + this.filePath + "' must be the JSON object '" + obj + "'.", msg);
-        }
-      }
+      this.yaml.apply(this, args);
     }
   }]);
 
@@ -658,7 +724,7 @@ var MustNotBe = (function (_FileMustBase4) {
      */
     value: function equal(text, msg) {
       if (this.file.exists()) {
-        if (fs.readFileSync(this.filePath, { encoding: "utf8" }) == text) {
+        if (fs.readFileSync(this.filePath, "utf8") == text) {
           throw new AssertionError("'" + this.filePath + "' content must not be equal to '" + text + "'.", msg);
         }
       }
@@ -682,46 +748,50 @@ var MustNotBe = (function (_FileMustBase4) {
     /**
      * Checks whether a file is not a JSON file.
      *
-     * @overload Whether a file is a JSON file.
-     * @param [msg]:string  The assertion message.
-     *
-     * @overload Whether a file is a JSON file and its object is a given one.
-     * @param obj:object    The object to check.
      * @param [msg]:string  The assertion message.
      */
-    value: function json() {
+    value: function json(msg) {
+      var con;
+
+      if (this.file.exists()) {
+        try {
+          con = this.file.json;
+        } catch (e) {}
+
+        if (con) throw new AssertionError("'" + this.filePath + "' must not be a JSON file.", msg);
+      }
+    }
+  }, {
+    key: "yaml",
+
+    /**
+     * Checks whether a file is not a YAML file.
+     *
+     * @param [msg]:string  The assertion message.
+     */
+    value: function yaml(msg) {
+      var con;
+
+      if (this.file.exists()) {
+        try {
+          con = this.file.yaml;
+        } catch (e) {}
+
+        if (con) throw new AssertionError("'" + this.filePath + "' must not be a YAML file.", msg);
+      }
+    }
+  }, {
+    key: "yml",
+
+    /**
+     * @alias yaml()
+     */
+    value: function yml() {
       for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
         args[_key6] = arguments[_key6];
       }
 
-      var obj, msg;
-
-      //(1) arguments
-      if (args.length == 1) {
-        if (typeof args[0] == "string") msg = args[0];else obj = args[0];
-      } else if (args.length > 1) {
-        obj = args[0];
-        msg = args[1];
-      }
-
-      //(2) check
-      if (this.file.exists()) {
-        var con = undefined;
-
-        try {
-          con = jsonfile.readFileSync(this.filePath);
-
-          if (!obj) {
-            throw new AssertionError("'" + this.filePath + "' must not be a JSON file.", msg);
-          } else {
-            if (deepEqual(con, obj)) {
-              throw new AssertionError("'" + this.filePath + "' must not be a JSON object '" + obj + "'.", msg);
-            }
-          }
-        } catch (e) {
-          if (e.name == "AssertionError") throw e;
-        }
-      }
+      this.yaml.apply(this, args);
     }
   }]);
 

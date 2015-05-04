@@ -7,8 +7,7 @@ describe("File", function() {
   const DIR = "test/unit/data";
   const FILE_NAME = "myfile.txt";
   const JSON_FILE_NAME = "myfile.json";
-  const FILE_PATH = path.join(DIR, FILE_NAME);
-  const JSON_FILE_PATH = path.join(DIR, JSON_FILE_NAME);
+  const YAML_FILE_NAME = "myfile.yml";
   const SUBDIR_NAME = "subdir";
   const SUBDIR_PATH = path.join(DIR, SUBDIR_NAME);
   const CONTENT = "En un lugar de la Mancha,\n" +
@@ -17,11 +16,20 @@ describe("File", function() {
                   "adarga antigua,\n" +
                   "rocín flaco y galgo corredor.\n";
   const JSON_OBJECT = {x: 1, y: 1};
-  var f, jf;
+  const YAML_OBJECT = {
+    language: "node_js",
+    node_js: ["0.11", "0.12"],
+    sudo: false,
+    before_install: "npm install -g grunt-cli",
+    install: "npm install",
+    before_script: "grunt buildes5"
+  };
+  var f, jf, yf;
 
   beforeEach(function() {
     f = file(DIR, FILE_NAME);
     jf = file(DIR, JSON_FILE_NAME);
+    yf = file(DIR, YAML_FILE_NAME);
   });
 
   describe("#constructor()", function() {
@@ -35,6 +43,36 @@ describe("File", function() {
 
       if (/win.*/.test(process.platform)) f.path.must.be.eq("\\my\\dir\\file.txt");
       else f.path.must.be.eq("/my/dir/file.txt");
+    });
+  });
+
+  describe("#yaml", function() {
+    it("yaml - pass", function() {
+      yf.yaml.must.be.eq(YAML_OBJECT);
+    });
+
+    it("yaml - fail", function() {
+      (function() {
+        var con = f.yaml;
+      }).must.raise();
+    });
+  });
+
+  describe("#json", function() {
+    it("json - pass", function() {
+      jf.json.must.be.eq(JSON_OBJECT);
+    });
+
+    it("json - fail", function() {
+      (function() {
+        var con = f.json;
+      }).must.raise();
+    });
+  });
+
+  describe("#text", function() {
+    it("text - pass", function() {
+      f.text.must.be.eq(CONTENT);
     });
   });
 
@@ -255,100 +293,88 @@ describe("File", function() {
   });
 
   describe("#must.be.json()", function() {
-    describe("be.json()", function() {
-      it("be.json() - pass", function() {
-        jf.must.be.json();
-      });
-
-      it("be.json() - fail", function() {
-        f.must.be.json.must.raise();
-      });
+    it("be.json() - pass", function() {
+      jf.must.be.json();
     });
 
-    describe("be.json(msg)", function() {
-      it("be.json(msg) - pass", function() {
-        jf.must.be.json("Custom message");
-      });
-
-      it("be.json(msg) - fail", function() {
-        (function() {
-          f.must.be.json("Custom message");
-        }).must.raise("Custom message");
-      });
+    it("be.json() - fail", function() {
+      f.must.be.json.must.raise();
     });
 
-    describe("be.json(obj)", function() {
-      it("be.json(obj) - pass", function() {
-        jf.must.be.json(JSON_OBJECT);
-      });
-
-      it("be.json(obj) - fail", function() {
-        (function() {
-          jf.must.be.json({});
-        }).must.raise();
-      });
+    it("be.json(msg) - pass", function() {
+      jf.must.be.json("Custom message");
     });
 
-    describe("be.json(obj, msg)", function() {
-      it("be.json(obj, msg) - pass", function() {
-        jf.must.be.json(JSON_OBJECT, "Custom message");
-      });
-
-      it("be.json(obj, msg) - fail", function() {
-        (function() {
-          jf.must.be.json({}, "Custom message");
-        }).must.raise("Custom message");
-      });
+    it("be.json(msg) - fail", function() {
+      (function() {
+        f.must.be.json("Custom message");
+      }).must.raise("Custom message");
     });
   });
 
   describe("#must.not.be.json()", function() {
-    describe("not.be.json()", function() {
-      it("not.be.json() - pass", function() {
-        f.must.not.be.json();
-      });
-
-      it("not.be.json() - fail", function() {
-        (function() {
-          jf.must.not.be.json();
-        }).must.raise();
-      });
+    it("not.be.json() - pass", function() {
+      f.must.not.be.json();
     });
 
-    describe("not.be.json(msg)", function() {
-      it("not.be.json(msg) - pass", function() {
-        f.must.not.be.json("Custom message");
-      });
-
-      it("not.be.json(msg) - fail", function() {
-        (function() {
-          jf.must.not.be.json("Custom message");
-        }).must.raise("Custom message");
-      });
+    it("not.be.json() - fail", function() {
+      (function() {
+        jf.must.not.be.json();
+      }).must.raise();
     });
 
-    describe("not.be.json(obj)", function() {
-      it("not.be.json(obj) - pass", function() {
-        jf.must.not.be.json({});
-      });
-
-      it("not.be.json(obj) - fail", function() {
-        (function() {
-          jf.must.not.be.json(JSON_OBJECT);
-        }).must.raise();
-      });
+    it("not.be.json(msg) - pass", function() {
+      f.must.not.be.json("Custom message");
     });
 
-    describe("not.be.json(obj, msg)", function() {
-      it("not.be.json(obj, msg) - pass", function() {
-        jf.must.not.be.json({}, "Custom message");
-      });
+    it("not.be.json(msg) - fail", function() {
+      (function() {
+        jf.must.not.be.json("Custom message");
+      }).must.raise("Custom message");
+    });
+  });
 
-      it("not.be.json(obj, msg) - fail", function() {
-        (function() {
-          jf.must.not.be.json(JSON_OBJECT, "Custom message");
-        }).must.raise("Custom message");
-      });
+  describe("#must.be.yaml()", function() {
+    it("be.yaml() - pass", function() {
+      yf.must.be.yaml();
+    });
+
+    it("be.yaml() - fail", function() {
+      (function() {
+        f.must.be.yaml();
+      }).must.raise();
+    });
+
+    it("be.yaml(msg) - pass", function() {
+      yf.must.be.yaml("Custom message");
+    });
+
+    it("be.yaml(msg) - fail", function() {
+      (function() {
+        f.must.be.yaml("Custom message");
+      }).must.raise("Custom message");
+    });
+  });
+
+  describe("#must.not.be.yaml()", function() {
+    it("not.be.yaml() - pass", function() {
+      f.must.not.be.yaml();
+    });
+
+    it("not.be.yaml() - fail", function() {
+      (function() {
+        yf.must.not.be.yaml();
+      }).must.raise();
+    });
+
+    it("not.be.yaml(msg) - pass", function() {
+      f.must.not.be.yaml("Custom message");
+    });
+
+    it("not.be.yaml(msg) - fail", function() {
+      (function() {
+        yf.must.not.be.yaml("Custom message");
+      }).must.raise("Custom message");
     });
   });
 });

@@ -7,6 +7,7 @@ An assertion library for files.
 Features:
 
 - Allow to assert files.
+- Allow to access the file content: text, JSON and YAML.
 - Allow to assert directories.
 
 ## Install
@@ -15,10 +16,12 @@ Features:
 npm install justo-assert-file
 ```
 
-## Assertions
-`justo-assert-file` allows to assert files and directories.
+## Table of contents
 
-### File assertions
+1. [File assertions](#file-assertions)
+2. [Directory assertions](#directory-assertions)
+
+## File assertions
 
 To assert files, we have to use the `file()` function as starting point:
 
@@ -37,25 +40,19 @@ const file = require("justo-assert-file").file;
 file("/my/dir", "file.txt").must.exist()
 ```
 
-#### must.exist()
+### must.exist() and must.not.exist()
 
 Checks whether the file exists:
 
 ```
 must.exist()
 must.exist(msg : string)
-```
 
-#### must.not.exist()
-
-Checks whether the file doesn't exist:
-
-```
 must.not.exist()
 must.not.exist(msg : string)
 ```
 
-####  must.contain()
+###  must.contain() and must.not.contain()
 
 Checks whether the file contains a text or several texts:
 
@@ -64,54 +61,82 @@ must.contain(txt : string)
 must.contain(txt : string, msg : string)
 must.contain(txts : string[])
 must.contain(txts : string[], msg : string)
-```
 
-#### must.not.contain()
-
-Checks whether the file doesn't contain a text or several texts:
-
-```
 must.not.contain(txt : string)
 must.not.contain(txt : string, msg : string)
 must.not.contain(txt : string[])
 must.not.contain(txt : string[], msg : string)
 ```
 
-#### must.be.equal() or must.be.eq()
+### must.be.equal(), must.be.eq(), must.not.be.equal() and must.not.be.eq()
 
 Checks whether the file content is equal to a given text:
 
 ```
 must.be.eq(txt : string)
 must.be.eq(txt : string, msg : string)
-```
 
-#### must.not.be.equal() or must.not.be.eq()
-
-Checks whether the file content is not equal to a given text:
-
-```
 must.not.be.eq(txt : string)
 must.not.be.eq(txt : string, msg : string)
 ```
 
-#### must.be.json()
+### Asserting JSON files
+
+#### must.be.json() and must.not.be.json()
 
 Checks whether the file content is a JSON object:
 
 ```
 must.be.json()
 must.be.json(msg : string)
+
+must.not.be.json()
+must.not.be.json(msg : string)
 ```
 
-If needed, we can specify the concrete object:
+#### json property
+
+The file object contains a `json` property for returning the content as an object.
+We can use, for example, `justo-assert` to check the content:
 
 ```
-must.be.json(obj : object)
-must.be.json(obj : object, msg : string)
+file("myfile.json").json.must.be.eq({...});
 ```
 
-### Directory assertions
+### Asserting YAML files
+
+#### must.be.yaml() and must.not.be.yaml()
+
+Checks whether the file is a YAML file:
+
+```
+must.be.yaml()
+must.be.yaml(msg : string)
+
+must.not.be.yaml()
+must.not.be.yaml(msg : string)
+```
+
+#### yaml property
+
+Similarly to `json`, the file object has a `yaml` property for returning the content
+as an object:
+
+```
+file("myfile.yml").yaml.must.be.eq({...});
+```
+
+### Asserting text files
+
+#### text property
+
+Similarly to `json` and `yaml`, we also have the `text` property:
+
+```
+file("myfile.txt").text.must.be.eq({...});
+```
+
+## Directory assertions
 
 To assert directories, we have to use the `dir()` function as starting point:
 
@@ -130,38 +155,26 @@ const dir = require("justo-assert-file").dir;
 dir("/my/dir", "subdir").must.exist()
 ```
 
-#### must.exist()
+### must.exist() and must.not.exist()
 
 Checks whether the directory exists:
 
 ```
 must.exist()
 must.exist(msg : string)
-```
 
-#### must.not.exist()
-
-Checks whether the directory doesn't exist:
-
-```
 must.not.exist()
 must.not.exist(msg : string)
 ```
 
-####  must.contain()
+###  must.contain() and must.not.contain()
 
 Checks whether the directory contains an entry (file, link or directory):
 
 ```
 must.contain(entry : string)
 must.contain(entry : string, msg : string)
-```
 
-#### must.not.contain()
-
-Checks whether the directory doesn't contain an entry (file, link or directory):
-
-```
 must.not.contain(entry : string)
 must.not.contain(entry : string, msg : string)
 ```
