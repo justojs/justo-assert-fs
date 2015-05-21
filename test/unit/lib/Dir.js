@@ -2,7 +2,7 @@
 const fs = require("fs");
 const os= require("os");
 const path = require("path");
-const dir = require("../../../../dist/es5/nodejs/justo-assert-file").dir;
+const dir = require("../../../dist/es5/nodejs/justo-assert-fs").dir;
 
 //suite
 describe("Dir", function() {
@@ -109,53 +109,105 @@ describe("Dir", function() {
     });
   });
 
-  describe("#must.contain()", function() {
-    describe("contain(entry)", function() {
-      it("contain(entry) - pass", function() {
-        d.must.contain(FILE_NAME);
+  describe("#must.have()", function() {
+    var d;
+
+    before(function() {
+      d = dir("test/unit/data");
+    });
+
+    describe("must.have(entry, msg)", function() {
+      it("have(entry) - pass", function() {
+        d.must.have("myfile.json");
       });
 
-      it("contain(entry) - fail", function() {
+      it("have(entry) - fail", function() {
         (function() {
-          d.must.contain("unknown.txt");
+          d.must.have("unknown.txt");
         }).must.raise();
+      });
+
+      it("have(entry, msg) - pass", function() {
+        d.must.have("myfile.json", "Custom message");
+      });
+
+      it("have(entry, msg) - fail", function() {
+        (function() {
+          d.must.have("unknown.txt", "Custom message");
+        }).must.raise("Custom message");
       });
     });
 
-    describe("contain(entry, msg)", function() {
-      it("contain(entry, msg) - pass", function() {
-        d.must.contain(FILE_NAME, "Custom message");
+    describe("must.have(entries, msg)", function() {
+      it("have(entries) - pass", function() {
+        d.must.have(["myfile.json", "myfile.yml"]);
       });
 
-      it("contain(entry, msg) - fail", function() {
+      it("have(entries) - fail", function() {
         (function() {
-          d.must.contain("unknown.txt", "Custom message");
+          d.must.have(["myfile.json", "unknown.txt"]);
+        }).must.raise();
+      });
+
+      it("have(entries, msg) - pass", function() {
+        d.must.have(["myfile.json", "myfile.yml"], "Custom message");
+      });
+
+      it("have(entries, msg) - fail", function() {
+        (function() {
+          d.must.have(["myfile.json", "unknown.txt"], "Custom message");
         }).must.raise("Custom message");
       });
     });
   });
 
-  describe("#must.not.contain()", function() {
-    describe("not.contain(entry)", function() {
-      it("not.contain(entry) - pass", function() {
-        d.must.not.contain("unknown.txt");
+  describe("#must.not.have()", function() {
+    var d;
+
+    before(function() {
+      d = dir("test/unit/data");
+    });
+
+    describe("not.have(entry, msg)", function() {
+      it("not.have(entry) - pass", function() {
+        d.must.not.have("unknown.txt");
       });
 
-      it("not.contain(entry) - fail", function() {
+      it("not.have(entry) - fail", function() {
         (function() {
-          d.must.not.contain(FILE_NAME);
+          d.must.not.have("myfile.json");
         }).must.raise();
+      });
+
+      it("not.have(entry, msg) - pass", function() {
+        d.must.not.have("unknown.txt", "Custom message");
+      });
+
+      it("not.have(entry, msg) - fail", function() {
+        (function() {
+          d.must.not.have("myfile.json", "Custom message");
+        }).must.raise("Custom message");
       });
     });
 
-    describe("not.contain(entry, msg)", function() {
-      it("not.contain(entry, msg) - pass", function() {
-        d.must.not.contain("unknown.txt", "Custom message");
+    describe("not.have(entries, msg)", function() {
+      it("not.have(entries) - pass", function() {
+        d.must.not.have(["unknown.txt", "unknown.json"]);
       });
 
-      it("not.contain(entry, msg) - fail", function() {
+      it("not.have(entries) - fail", function() {
         (function() {
-          d.must.not.contain(FILE_NAME, "Custom message");
+          d.must.not.have(["unknown.txt", "myfile.txt"]);
+        }).must.raise();
+      });
+
+      it("not.have(entries, msg) - pass", function() {
+        d.must.not.have(["unknown.txt", "unknown.json"], "Custom message");
+      });
+
+      it("not.have(entries, msg) - fail", function() {
+        (function() {
+          d.must.not.have(["unknown.txt", "myfile.txt"], "Custom message");
         }).must.raise("Custom message");
       });
     });

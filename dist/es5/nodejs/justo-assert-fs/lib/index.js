@@ -38,6 +38,36 @@ exports.file = file;
  */
 exports.dir = dir;
 //imports
+var path = require("path");
+function file() {
+  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  var fp;
+
+  //(1) arguments
+  if (args.length === 0) throw new Error("File path expected.");else if (args.length == 1) fp = args[0];else fp = path.join.apply(path, args);
+
+  //(2) return
+  return new File(fp);
+}
+
+function dir() {
+  for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+    args[_key2] = arguments[_key2];
+  }
+
+  var dp;
+
+  //(1) arguments
+  if (args.length === 0) throw new Error("Directory path expected.");else if (args.length == 1) dp = args[0];else dp = path.join.apply(path, args);
+
+  //(2) return
+  return new Dir(dp);
+}
+
+//imports
 var _AssertionError = require("assert").AssertionError;
 
 /**
@@ -66,192 +96,6 @@ var AssertionError = (function (_AssertionError2) {
 
   return AssertionError;
 })(_AssertionError);
-
-/**
- * A directory wrapper.
- *
- * @readonly path:string  The directory path.
- */
-
-var Dir = (function () {
-  /**
-   * Constructor.
-   */
-
-  function Dir(path) {
-    _classCallCheck(this, Dir);
-
-    Object.defineProperty(this, "path", { value: path });
-    Object.defineProperty(this, "must", { value: new DirMust(this) });
-  }
-
-  _createClass(Dir, [{
-    key: "exists",
-
-    /**
-     * Returns if the directory exists.
-     *
-     * @return boolean
-     */
-    value: function exists() {
-      try {
-        return fs.statSync(this.path).isDirectory();
-      } catch (e) {
-        return false;
-      }
-    }
-  }]);
-
-  return Dir;
-})();
-
-/**
- * DirMust base.
- *
- * @readonly dir:Dir  The directory.
- */
-
-var DirMustBase = (function () {
-  /**
-   * Constructor.
-   *
-   * @param(attr) dir
-   */
-
-  function DirMustBase(dir) {
-    _classCallCheck(this, DirMustBase);
-
-    Object.defineProperty(this, "dir", { value: dir });
-  }
-
-  _createClass(DirMustBase, [{
-    key: "dirPath",
-
-    /**
-     * The file path.
-     *
-     * @type string
-     */
-    get: function () {
-      return this.dir.path;
-    }
-  }]);
-
-  return DirMustBase;
-})();
-
-/**
- * A wrapper file for asserting.
- *
- * @readonly dir:Dir  The directory.
- */
-
-var DirMust = (function (_DirMustBase) {
-  /**
-   * Constructor.
-   *
-   * @param(attr) dir
-   */
-
-  function DirMust(dir) {
-    _classCallCheck(this, DirMust);
-
-    _get(Object.getPrototypeOf(DirMust.prototype), "constructor", this).call(this, dir);
-  }
-
-  _inherits(DirMust, _DirMustBase);
-
-  _createClass(DirMust, [{
-    key: "not",
-
-    /**
-     * The must.not.
-     */
-    get: function () {
-      return new DirMustNot(this.dir);
-    }
-  }, {
-    key: "exist",
-
-    /**
-     * Checks whether the directory exists.
-     *
-     * @param [msg]:string  The assertion error.
-     */
-    value: function exist(msg) {
-      if (!this.dir.exists()) {
-        throw new AssertionError("'" + this.dirPath + "' must exist.", msg);
-      }
-    }
-  }, {
-    key: "contain",
-
-    /**
-     * Checks whether the directory contains an entry.
-     *
-     * @param entry:string  The entry name.
-     * @param [msg]:string  The assertion message.
-     */
-    value: function contain(entry, msg) {
-      if (!fs.existsSync(path.join(this.dirPath, entry))) {
-        throw new AssertionError("'" + this.dirPath + "' must contain an entry '" + entry + "'.", msg);
-      }
-    }
-  }]);
-
-  return DirMust;
-})(DirMustBase);
-
-/**
- * must.not.
- */
-
-var DirMustNot = (function (_DirMustBase2) {
-  /**
-   * Constructor.
-   *
-   * @param(attr) dir
-   */
-
-  function DirMustNot(dir) {
-    _classCallCheck(this, DirMustNot);
-
-    _get(Object.getPrototypeOf(DirMustNot.prototype), "constructor", this).call(this, dir);
-  }
-
-  _inherits(DirMustNot, _DirMustBase2);
-
-  _createClass(DirMustNot, [{
-    key: "exist",
-
-    /**
-     * Checks whether the directory doesn't exist.
-     *
-     * @param [msg]:string  The assertion error.
-     */
-    value: function exist(msg) {
-      if (this.dir.exists()) {
-        throw new AssertionError("'" + this.dirPath + "' must not exist.", msg);
-      }
-    }
-  }, {
-    key: "contain",
-
-    /**
-     * Checks whether a directory doesn't contain an entry.
-     *
-     * @param entry:string  The entry name.
-     * @param [msg]:string  The assertion message.
-     */
-    value: function contain(entry, msg) {
-      if (fs.existsSync(path.join(this.dirPath, entry))) {
-        throw new AssertionError("'" + this.dirPath + "' must not contain an entry '" + entry + "'.", msg);
-      }
-    }
-  }]);
-
-  return DirMustNot;
-})(DirMustBase);
 
 //imports
 var fs = require("fs");
@@ -450,8 +294,8 @@ var FileMust = (function (_FileMustBase) {
      * @param [msg]:string  The assertion message.
      */
     value: function contain() {
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
+      for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        args[_key3] = arguments[_key3];
       }
 
       var txts, msg, con;
@@ -539,8 +383,8 @@ var FileMustNot = (function (_FileMustBase2) {
      * @param [msg]:string  The assertion message.
      */
     value: function contain() {
-      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
+      for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        args[_key4] = arguments[_key4];
       }
 
       var txts, msg;
@@ -632,8 +476,8 @@ var FileMustBe = (function (_FileMustBase3) {
      * @alias equal
      */
     value: function eq() {
-      for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
+      for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        args[_key5] = arguments[_key5];
       }
 
       this.equal.apply(this, args);
@@ -683,8 +527,8 @@ var FileMustBe = (function (_FileMustBase3) {
      * @alias yaml()
      */
     value: function yml() {
-      for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        args[_key4] = arguments[_key4];
+      for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+        args[_key6] = arguments[_key6];
       }
 
       this.yaml.apply(this, args);
@@ -736,8 +580,8 @@ var MustNotBe = (function (_FileMustBase4) {
      * @alias equal
      */
     value: function eq() {
-      for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        args[_key5] = arguments[_key5];
+      for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+        args[_key7] = arguments[_key7];
       }
 
       this.equal.apply(this, args);
@@ -787,8 +631,8 @@ var MustNotBe = (function (_FileMustBase4) {
      * @alias yaml()
      */
     value: function yml() {
-      for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-        args[_key6] = arguments[_key6];
+      for (var _len8 = arguments.length, args = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+        args[_key8] = arguments[_key8];
       }
 
       this.yaml.apply(this, args);
@@ -798,32 +642,242 @@ var MustNotBe = (function (_FileMustBase4) {
   return MustNotBe;
 })(FileMustBase);
 
-//imports
-var path = require("path");
-function file() {
-  for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-    args[_key7] = arguments[_key7];
+/**
+ * A directory wrapper.
+ *
+ * @readonly path:string  The directory path.
+ */
+
+var Dir = (function () {
+  /**
+   * Constructor.
+   */
+
+  function Dir(path) {
+    _classCallCheck(this, Dir);
+
+    Object.defineProperty(this, "path", { value: path });
+    Object.defineProperty(this, "must", { value: new DirMust(this) });
   }
 
-  var fp;
+  _createClass(Dir, [{
+    key: "exists",
 
-  //(1) arguments
-  if (args.length === 0) throw new Error("File path expected.");else if (args.length == 1) fp = args[0];else fp = path.join.apply(path, args);
+    /**
+     * Returns if the directory exists.
+     *
+     * @return boolean
+     */
+    value: function exists() {
+      try {
+        return fs.statSync(this.path).isDirectory();
+      } catch (e) {
+        return false;
+      }
+    }
+  }]);
 
-  //(2) return
-  return new File(fp);
-}
+  return Dir;
+})();
 
-function dir() {
-  for (var _len8 = arguments.length, args = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-    args[_key8] = arguments[_key8];
+/**
+ * DirMust base.
+ *
+ * @readonly dir:Dir  The directory.
+ */
+
+var DirMustBase = (function () {
+  /**
+   * Constructor.
+   *
+   * @param(attr) dir
+   */
+
+  function DirMustBase(dir) {
+    _classCallCheck(this, DirMustBase);
+
+    Object.defineProperty(this, "dir", { value: dir });
   }
 
-  var dp;
+  _createClass(DirMustBase, [{
+    key: "dirPath",
 
-  //(1) arguments
-  if (args.length === 0) throw new Error("Directory path expected.");else if (args.length == 1) dp = args[0];else dp = path.join.apply(path, args);
+    /**
+     * The file path.
+     *
+     * @type string
+     */
+    get: function () {
+      return this.dir.path;
+    }
+  }]);
 
-  //(2) return
-  return new Dir(dp);
-}
+  return DirMustBase;
+})();
+
+/**
+ * A wrapper file for asserting.
+ *
+ * @readonly dir:Dir  The directory.
+ */
+
+var DirMust = (function (_DirMustBase) {
+  /**
+   * Constructor.
+   *
+   * @param(attr) dir
+   */
+
+  function DirMust(dir) {
+    _classCallCheck(this, DirMust);
+
+    _get(Object.getPrototypeOf(DirMust.prototype), "constructor", this).call(this, dir);
+  }
+
+  _inherits(DirMust, _DirMustBase);
+
+  _createClass(DirMust, [{
+    key: "not",
+
+    /**
+     * The must.not.
+     */
+    get: function () {
+      return new DirMustNot(this.dir);
+    }
+  }, {
+    key: "exist",
+
+    /**
+     * Checks whether the directory exists.
+     *
+     * @param [msg]:string  The assertion error.
+     */
+    value: function exist(msg) {
+      if (!this.dir.exists()) {
+        throw new AssertionError("'" + this.dirPath + "' must exist.", msg);
+      }
+    }
+  }, {
+    key: "have",
+
+    /**
+     * Checks whether the directory contains an entry.
+     *
+     * @overload An entry.
+     * @param entry:string  The entry name.
+     * @param [msg]:string  The assertion message.
+     *
+     * @overload Several entries.
+     * @param entries:string[]  The entry names.
+     * @param [msg]:string      The assertion message.
+     */
+    value: function have(entries, msg) {
+      //(1) arguments
+      if (typeof entries == "string") entries = [entries];
+
+      //(2) check
+      for (var i = 0; i < entries.length; ++i) {
+        var entry = entries[i];
+
+        if (!fs.existsSync(path.join(this.dirPath, entry))) {
+          throw new AssertionError("'" + this.dirPath + "' must contain an entry '" + entry + "'.", msg);
+        }
+      }
+    }
+  }, {
+    key: "contain",
+
+    /**
+     * @alias have
+     * @deprecated
+     */
+    value: function contain() {
+      for (var _len9 = arguments.length, args = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+        args[_key9] = arguments[_key9];
+      }
+
+      this.have.apply(this, args);
+    }
+  }]);
+
+  return DirMust;
+})(DirMustBase);
+
+/**
+ * must.not.
+ */
+
+var DirMustNot = (function (_DirMustBase2) {
+  /**
+   * Constructor.
+   *
+   * @param(attr) dir
+   */
+
+  function DirMustNot(dir) {
+    _classCallCheck(this, DirMustNot);
+
+    _get(Object.getPrototypeOf(DirMustNot.prototype), "constructor", this).call(this, dir);
+  }
+
+  _inherits(DirMustNot, _DirMustBase2);
+
+  _createClass(DirMustNot, [{
+    key: "exist",
+
+    /**
+     * Checks whether the directory doesn't exist.
+     *
+     * @param [msg]:string  The assertion error.
+     */
+    value: function exist(msg) {
+      if (this.dir.exists()) {
+        throw new AssertionError("'" + this.dirPath + "' must not exist.", msg);
+      }
+    }
+  }, {
+    key: "have",
+
+    /**
+     * Checks whether a directory doesn't contain an entry.
+     *
+     * @overload An entry.
+     * @param entry:string  The entry name.
+     * @param [msg]:string  The assertion message.
+     *
+     * @overload Several entries.
+     * @param entries:string[]  The entry names.
+     * @param [msg]:string      The assertion message.
+     */
+    value: function have(entries, msg) {
+      //(1) arguments
+      if (typeof entries == "string") entries = [entries];
+
+      //(2) check
+      for (var i = 0; i < entries.length; ++i) {
+        var entry = entries[i];
+
+        if (fs.existsSync(path.join(this.dirPath, entry))) {
+          throw new AssertionError("'" + this.dirPath + "' must not contain an entry '" + entry + "'.", msg);
+        }
+      }
+    }
+  }, {
+    key: "contain",
+
+    /**
+     * @alias have
+     * @deprecated
+     */
+    value: function contain() {
+      for (var _len10 = arguments.length, args = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+        args[_key10] = arguments[_key10];
+      }
+
+      this.have.apply(this, args);
+    }
+  }]);
+
+  return DirMustNot;
+})(DirMustBase);

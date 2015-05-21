@@ -1,7 +1,7 @@
 {
-  "name": "justo-assert-file",
-  "version": "0.2.0",
-  "description": "An assertion library for files.",
+  "name": "justo-assert-fs",
+  "version": "0.3.0",
+  "description": "Assertion library for files and directories.",
   "homepage": "http://www.justojs.org",
   "license": "MIT",
   "author": {
@@ -58,15 +58,15 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-babel": "*",
-    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-clean": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
     "grunt-contrib-jshint": "*",
     "grunt-contrib-uglify": "*",
-    "grunt-mocha-test": "^0.12.7",
-    "grunt-travis-lint": "0.0.3",
+    "grunt-mocha-test": "*",
+    "grunt-travis-lint": "*",
     "justo-assert": "*",
-    "mocha": "^2.2.4"
+    "mocha": "*"
   },
   "preferGlobal": false,
   "main": "lib/index.js",
@@ -75,6 +75,6 @@
     "test"
   ],
   "scripts": {
-    "test": "grunt mochaTest:es5"
+    "test": "grunt test"
   }
 }

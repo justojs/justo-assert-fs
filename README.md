@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/JustoJS/justo-assert-file.svg)](https://travis-ci.org/JustoJS/justo-assert-file)
+[![Build Status](https://travis-ci.org/justojs/justo-assert-fs.svg?branch=master)](https://travis-ci.org/justojs/justo-assert-fs)
 
 An assertion library for files.
 
@@ -13,7 +13,7 @@ Features:
 ## Install
 
 ```
-npm install justo-assert-file
+npm install justo-assert-fs
 ```
 
 ## Table of contents
@@ -35,7 +35,7 @@ Once created the file object, we have to use the `must` property to assert.
 Example:
 
 ```
-const file = require("justo-assert-file").file;
+const file = require("justo-assert-fs").file;
 
 file("/my/dir", "file.txt").must.exist()
 ```
@@ -150,7 +150,7 @@ Once created the direcory object, we have to use the `must` property to assert.
 Example:
 
 ```
-const dir = require("justo-assert-file").dir;
+const dir = require("justo-assert-fs").dir;
 
 dir("/my/dir", "subdir").must.exist()
 ```
@@ -167,14 +167,18 @@ must.not.exist()
 must.not.exist(msg : string)
 ```
 
-###  must.contain() and must.not.contain()
+###  must.have() and must.not.have()
 
-Checks whether the directory contains an entry (file, link or directory):
+Checks whether the directory contains a specified entry set (file, directories...):
 
 ```
-must.contain(entry : string)
-must.contain(entry : string, msg : string)
+must.have(entry : string)
+must.have(entry : string, msg : string)
+must.have(entries : string[])
+must.have(entries : string[], msg : string)
 
-must.not.contain(entry : string)
-must.not.contain(entry : string, msg : string)
+must.not.have(entry : string)
+must.not.have(entry : string, msg : string)
+must.not.have(entries : string[])
+must.not.have(entries : string[], msg : string);
 ```

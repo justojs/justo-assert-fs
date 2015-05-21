@@ -37,7 +37,12 @@ module.exports = function(grunt) {
       },
 
       preCompiler: {
-      	src: ["lib/**/*.*"],
+      	src: [
+          "lib/index.js",
+          "lib/AssertionError.js",
+          "lib/File.js",
+          "lib/Dir.js"
+        ],
       	dest: "build/es5/lib/index.js"
       }
     },
@@ -111,7 +116,8 @@ module.exports = function(grunt) {
 
   //aliases
   grunt.registerTask("buildes5", ["travis-lint", "jshint", "clean:es5", "concat:preCompiler", "babel:es5", "copy:nodejs"]);
-  grunt.registerTask("es5", ["buildes5", "mochaTest:es5"]);
+  grunt.registerTask("test", ["mochaTest:es5"]);
+  grunt.registerTask("es5", ["buildes5", "test"]);
 
   // Default task
   grunt.registerTask("default", []);
