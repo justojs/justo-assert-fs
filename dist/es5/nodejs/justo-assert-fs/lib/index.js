@@ -1,16 +1,22 @@
+//imports
 "use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
-
-var _get = function get(object, property, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
-
-var _inherits = function (subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; };
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+exports.file = file;
+exports.dir = dir;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var path = require("path");
 
 /**
  * Creates a file wrapper for asserting.
@@ -23,7 +29,21 @@ Object.defineProperty(exports, "__esModule", {
  * @param dir:string  The directory path.
  * @param file:string The file name.
  */
-exports.file = file;
+
+function file() {
+  var fp;
+
+  //(1) arguments
+
+  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  if (args.length === 0) throw new Error("File path expected.");else if (args.length == 1) fp = args[0];else fp = path.join.apply(path, args);
+
+  //(2) return
+  return new File(fp);
+}
 
 /**
  * Creates a dir wrapper for asserting.
@@ -36,31 +56,16 @@ exports.file = file;
  * @param parent:string The parent directory.
  * @param name:string   The directory name.
  */
-exports.dir = dir;
-//imports
-var path = require("path");
-function file() {
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
-
-  var fp;
-
-  //(1) arguments
-  if (args.length === 0) throw new Error("File path expected.");else if (args.length == 1) fp = args[0];else fp = path.join.apply(path, args);
-
-  //(2) return
-  return new File(fp);
-}
 
 function dir() {
+  var dp;
+
+  //(1) arguments
+
   for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
     args[_key2] = arguments[_key2];
   }
 
-  var dp;
-
-  //(1) arguments
   if (args.length === 0) throw new Error("Directory path expected.");else if (args.length == 1) dp = args[0];else dp = path.join.apply(path, args);
 
   //(2) return
@@ -75,6 +80,8 @@ var _AssertionError = require("assert").AssertionError;
  */
 
 var AssertionError = (function (_AssertionError2) {
+  _inherits(AssertionError, _AssertionError2);
+
   /**
    * Initializes the error.
    *
@@ -92,12 +99,10 @@ var AssertionError = (function (_AssertionError2) {
     _get(Object.getPrototypeOf(AssertionError.prototype), "constructor", this).call(this, { message: msg2 || msg1 });
   }
 
-  _inherits(AssertionError, _AssertionError2);
-
+  //imports
   return AssertionError;
 })(_AssertionError);
 
-//imports
 var fs = require("fs");
 var jsonfile = require("jsonfile");
 var jsyaml = require("js-yaml");
@@ -123,14 +128,20 @@ var File = (function () {
     Object.defineProperty(this, "must", { value: new FileMust(this) });
   }
 
+  /**
+   * FileMust base.
+   *
+   * @readonly file:File  The file.
+   */
+
+  /**
+   * Returns if the file exists.
+   *
+   * @return boolean
+   */
+
   _createClass(File, [{
     key: "exists",
-
-    /**
-     * Returns if the file exists.
-     *
-     * @return boolean
-     */
     value: function exists() {
       try {
         return fs.statSync(this.path).isFile();
@@ -138,15 +149,15 @@ var File = (function () {
         return false;
       }
     }
-  }, {
-    key: "yaml",
 
     /**
      * The file content when this is a YAML file.
      *
      * @type object
      */
-    get: function () {
+  }, {
+    key: "yaml",
+    get: function get() {
       var con;
 
       //(1) get con
@@ -159,24 +170,24 @@ var File = (function () {
       //(2) return
       return con;
     }
-  }, {
-    key: "yml",
 
     /**
      * @alias yaml
      */
-    get: function () {
+  }, {
+    key: "yml",
+    get: function get() {
       return this.yaml;
     }
-  }, {
-    key: "json",
 
     /**
      * The file content when this is a JSON file.
      *
      * @type json
      */
-    get: function () {
+  }, {
+    key: "json",
+    get: function get() {
       var con;
 
       //(1) get
@@ -189,27 +200,21 @@ var File = (function () {
       //(2) return
       return con;
     }
-  }, {
-    key: "text",
 
     /**
      * The file content.
      *
      * @type string
      */
-    get: function () {
+  }, {
+    key: "text",
+    get: function get() {
       return fs.readFileSync(this.path, "utf8");
     }
   }]);
 
   return File;
 })();
-
-/**
- * FileMust base.
- *
- * @readonly file:File  The file.
- */
 
 var FileMustBase = (function () {
   /**
@@ -224,15 +229,21 @@ var FileMustBase = (function () {
     Object.defineProperty(this, "file", { value: file });
   }
 
+  /**
+   * A wrapper file for asserting.
+   *
+   * @readonly file:File    The file.
+   */
+
+  /**
+   * The file path.
+   *
+   * @type string
+   */
+
   _createClass(FileMustBase, [{
     key: "filePath",
-
-    /**
-     * The file path.
-     *
-     * @type string
-     */
-    get: function () {
+    get: function get() {
       return this.file.path;
     }
   }]);
@@ -240,13 +251,9 @@ var FileMustBase = (function () {
   return FileMustBase;
 })();
 
-/**
- * A wrapper file for asserting.
- *
- * @readonly file:File    The file.
- */
-
 var FileMust = (function (_FileMustBase) {
+  _inherits(FileMust, _FileMustBase);
+
   /**
    * Constructor.
    *
@@ -259,27 +266,15 @@ var FileMust = (function (_FileMustBase) {
     _get(Object.getPrototypeOf(FileMust.prototype), "constructor", this).call(this, file);
   }
 
-  _inherits(FileMust, _FileMustBase);
+  /**
+   * must.not.
+   */
+
+  /**
+   * The must.not.
+   */
 
   _createClass(FileMust, [{
-    key: "not",
-
-    /**
-     * The must.not.
-     */
-    get: function () {
-      return new FileMustNot(this.file);
-    }
-  }, {
-    key: "be",
-
-    /**
-     * must.be.
-     */
-    get: function () {
-      return new FileMustBe(this.file);
-    }
-  }, {
     key: "contain",
 
     /**
@@ -294,19 +289,20 @@ var FileMust = (function (_FileMustBase) {
      * @param [msg]:string  The assertion message.
      */
     value: function contain() {
+      var txts, msg, con;
+
+      //(1) arguments
+
       for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
         args[_key3] = arguments[_key3];
       }
 
-      var txts, msg, con;
-
-      //(1) arguments
       if (args.length === 0) throw new Error("Text to check expected.");else if (args.length == 1) txts = args[0];else {
+        ;
+
         txts = args[0];
         msg = args[1];
-      }
-
-      if (typeof txts == "string") txts = [txts];
+      }if (typeof txts == "string") txts = [txts];
 
       //(2) does file exist?
       if (!this.file.exists()) {
@@ -322,29 +318,41 @@ var FileMust = (function (_FileMustBase) {
         if (con.indexOf(txt) < 0) throw new AssertionError("'" + this.filePath + "' must contain '" + txt + "'.", msg);
       }
     }
-  }, {
-    key: "exist",
 
     /**
      * Checks whether the file exists.
      *
      * @param [msg]:string  The assertion error.
      */
+  }, {
+    key: "exist",
     value: function exist(msg) {
       if (!this.file.exists()) {
         throw new AssertionError("'" + this.filePath + "' must exist.", msg);
       }
+    }
+  }, {
+    key: "not",
+    get: function get() {
+      return new FileMustNot(this.file);
+    }
+
+    /**
+     * must.be.
+     */
+  }, {
+    key: "be",
+    get: function get() {
+      return new FileMustBe(this.file);
     }
   }]);
 
   return FileMust;
 })(FileMustBase);
 
-/**
- * must.not.
- */
-
 var FileMustNot = (function (_FileMustBase2) {
+  _inherits(FileMustNot, _FileMustBase2);
+
   /**
    * Constructor.
    *
@@ -357,18 +365,15 @@ var FileMustNot = (function (_FileMustBase2) {
     _get(Object.getPrototypeOf(FileMustNot.prototype), "constructor", this).call(this, file);
   }
 
-  _inherits(FileMustNot, _FileMustBase2);
+  /**
+   * must.be.
+   */
+
+  /**
+   * must.not.be.
+   */
 
   _createClass(FileMustNot, [{
-    key: "be",
-
-    /**
-     * must.not.be.
-     */
-    get: function () {
-      return new MustNotBe(this.file);
-    }
-  }, {
     key: "contain",
 
     /**
@@ -383,19 +388,20 @@ var FileMustNot = (function (_FileMustBase2) {
      * @param [msg]:string  The assertion message.
      */
     value: function contain() {
+      var txts, msg;
+
+      //(1) arguments
+
       for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         args[_key4] = arguments[_key4];
       }
 
-      var txts, msg;
-
-      //(1) arguments
       if (args.length === 0) throw new Error("Text to check expected.");else if (args.length == 1) txts = args[0];else {
+        ;
+
         txts = args[0];
         msg = args[1];
-      }
-
-      if (typeof txts == "string") txts = [txts];
+      }if (typeof txts == "string") txts = [txts];
 
       //(2) check
       if (this.file.exists()) {
@@ -408,29 +414,32 @@ var FileMustNot = (function (_FileMustBase2) {
         }
       }
     }
-  }, {
-    key: "exist",
 
     /**
      * Checks whether the file doesn't exist.
      *
      * @param [msg]:string  The assertion error.
      */
+  }, {
+    key: "exist",
     value: function exist(msg) {
       if (this.file.exists()) {
         throw new AssertionError("'" + this.filePath + "' must not exist.", msg);
       }
+    }
+  }, {
+    key: "be",
+    get: function get() {
+      return new MustNotBe(this.file);
     }
   }]);
 
   return FileMustNot;
 })(FileMustBase);
 
-/**
- * must.be.
- */
-
 var FileMustBe = (function (_FileMustBase3) {
+  _inherits(FileMustBe, _FileMustBase3);
+
   /**
    * Constructor.
    *
@@ -443,17 +452,19 @@ var FileMustBe = (function (_FileMustBase3) {
     _get(Object.getPrototypeOf(FileMustBe.prototype), "constructor", this).call(this, file);
   }
 
-  _inherits(FileMustBe, _FileMustBase3);
+  /**
+   * must.not.be
+   */
+
+  /**
+   * Checks whether the file content is equal to the specified text.
+   *
+   * @param text:string   The text to check.
+   * @param [msg]:string  The assertion message.
+   */
 
   _createClass(FileMustBe, [{
     key: "equal",
-
-    /**
-     * Checks whether the file content is equal to the specified text.
-     *
-     * @param text:string   The text to check.
-     * @param [msg]:string  The assertion message.
-     */
     value: function equal(text, msg) {
       var con, check;
 
@@ -469,27 +480,23 @@ var FileMustBe = (function (_FileMustBase3) {
         throw new AssertionError("'" + this.filePath + "' content must be equal to '" + text + "'. Read: '" + con + "'.", msg);
       }
     }
-  }, {
-    key: "eq",
 
     /**
      * @alias equal
      */
-    value: function eq() {
-      for (var _len5 = arguments.length, args = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        args[_key5] = arguments[_key5];
-      }
-
-      this.equal.apply(this, args);
-    }
   }, {
-    key: "json",
+    key: "eq",
+    value: function eq() {
+      this.equal.apply(this, arguments);
+    }
 
     /**
      * Checks whether a file is a JSON file.
      *
      * @param [msg]:string  The assertion message.
      */
+  }, {
+    key: "json",
     value: function json(msg) {
       if (!this.file.exists()) {
         throw new AssertionError("'" + this.filePath + "' must exist.", msg);
@@ -501,14 +508,14 @@ var FileMustBe = (function (_FileMustBase3) {
         }
       }
     }
-  }, {
-    key: "yaml",
 
     /**
      * Checks whether a file is a YAML file.
      *
      * @param [msg]:string  The assertion message.
      */
+  }, {
+    key: "yaml",
     value: function yaml(msg) {
       if (!this.file.exists()) {
         throw new AssertionError("'" + this.filePath + "' must exist.", msg);
@@ -520,29 +527,23 @@ var FileMustBe = (function (_FileMustBase3) {
         }
       }
     }
-  }, {
-    key: "yml",
 
     /**
      * @alias yaml()
      */
+  }, {
+    key: "yml",
     value: function yml() {
-      for (var _len6 = arguments.length, args = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-        args[_key6] = arguments[_key6];
-      }
-
-      this.yaml.apply(this, args);
+      this.yaml.apply(this, arguments);
     }
   }]);
 
   return FileMustBe;
 })(FileMustBase);
 
-/**
- * must.not.be
- */
-
 var MustNotBe = (function (_FileMustBase4) {
+  _inherits(MustNotBe, _FileMustBase4);
+
   /**
    * Constructor.
    *
@@ -555,17 +556,21 @@ var MustNotBe = (function (_FileMustBase4) {
     _get(Object.getPrototypeOf(MustNotBe.prototype), "constructor", this).call(this, file);
   }
 
-  _inherits(MustNotBe, _FileMustBase4);
+  /**
+   * A directory wrapper.
+   *
+   * @readonly path:string  The directory path.
+   */
+
+  /**
+   * Checks whether the file content is not equal to the specified text.
+   *
+   * @param text:string   The text to check.
+   * @param [msg]:string  The assertion message.
+   */
 
   _createClass(MustNotBe, [{
     key: "equal",
-
-    /**
-     * Checks whether the file content is not equal to the specified text.
-     *
-     * @param text:string   The text to check.
-     * @param [msg]:string  The assertion message.
-     */
     value: function equal(text, msg) {
       if (this.file.exists()) {
         if (fs.readFileSync(this.filePath, "utf8") == text) {
@@ -573,27 +578,23 @@ var MustNotBe = (function (_FileMustBase4) {
         }
       }
     }
-  }, {
-    key: "eq",
 
     /**
      * @alias equal
      */
-    value: function eq() {
-      for (var _len7 = arguments.length, args = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-        args[_key7] = arguments[_key7];
-      }
-
-      this.equal.apply(this, args);
-    }
   }, {
-    key: "json",
+    key: "eq",
+    value: function eq() {
+      this.equal.apply(this, arguments);
+    }
 
     /**
      * Checks whether a file is not a JSON file.
      *
      * @param [msg]:string  The assertion message.
      */
+  }, {
+    key: "json",
     value: function json(msg) {
       var con;
 
@@ -605,14 +606,14 @@ var MustNotBe = (function (_FileMustBase4) {
         if (con) throw new AssertionError("'" + this.filePath + "' must not be a JSON file.", msg);
       }
     }
-  }, {
-    key: "yaml",
 
     /**
      * Checks whether a file is not a YAML file.
      *
      * @param [msg]:string  The assertion message.
      */
+  }, {
+    key: "yaml",
     value: function yaml(msg) {
       var con;
 
@@ -624,29 +625,19 @@ var MustNotBe = (function (_FileMustBase4) {
         if (con) throw new AssertionError("'" + this.filePath + "' must not be a YAML file.", msg);
       }
     }
-  }, {
-    key: "yml",
 
     /**
      * @alias yaml()
      */
+  }, {
+    key: "yml",
     value: function yml() {
-      for (var _len8 = arguments.length, args = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-        args[_key8] = arguments[_key8];
-      }
-
-      this.yaml.apply(this, args);
+      this.yaml.apply(this, arguments);
     }
   }]);
 
   return MustNotBe;
 })(FileMustBase);
-
-/**
- * A directory wrapper.
- *
- * @readonly path:string  The directory path.
- */
 
 var Dir = (function () {
   /**
@@ -660,14 +651,20 @@ var Dir = (function () {
     Object.defineProperty(this, "must", { value: new DirMust(this) });
   }
 
+  /**
+   * DirMust base.
+   *
+   * @readonly dir:Dir  The directory.
+   */
+
+  /**
+   * Returns if the directory exists.
+   *
+   * @return boolean
+   */
+
   _createClass(Dir, [{
     key: "exists",
-
-    /**
-     * Returns if the directory exists.
-     *
-     * @return boolean
-     */
     value: function exists() {
       try {
         return fs.statSync(this.path).isDirectory();
@@ -679,12 +676,6 @@ var Dir = (function () {
 
   return Dir;
 })();
-
-/**
- * DirMust base.
- *
- * @readonly dir:Dir  The directory.
- */
 
 var DirMustBase = (function () {
   /**
@@ -699,15 +690,21 @@ var DirMustBase = (function () {
     Object.defineProperty(this, "dir", { value: dir });
   }
 
+  /**
+   * A wrapper file for asserting.
+   *
+   * @readonly dir:Dir  The directory.
+   */
+
+  /**
+   * The file path.
+   *
+   * @type string
+   */
+
   _createClass(DirMustBase, [{
     key: "dirPath",
-
-    /**
-     * The file path.
-     *
-     * @type string
-     */
-    get: function () {
+    get: function get() {
       return this.dir.path;
     }
   }]);
@@ -715,13 +712,9 @@ var DirMustBase = (function () {
   return DirMustBase;
 })();
 
-/**
- * A wrapper file for asserting.
- *
- * @readonly dir:Dir  The directory.
- */
-
 var DirMust = (function (_DirMustBase) {
+  _inherits(DirMust, _DirMustBase);
+
   /**
    * Constructor.
    *
@@ -734,18 +727,15 @@ var DirMust = (function (_DirMustBase) {
     _get(Object.getPrototypeOf(DirMust.prototype), "constructor", this).call(this, dir);
   }
 
-  _inherits(DirMust, _DirMustBase);
+  /**
+   * must.not.
+   */
+
+  /**
+   * The must.not.
+   */
 
   _createClass(DirMust, [{
-    key: "not",
-
-    /**
-     * The must.not.
-     */
-    get: function () {
-      return new DirMustNot(this.dir);
-    }
-  }, {
     key: "exist",
 
     /**
@@ -758,8 +748,6 @@ var DirMust = (function (_DirMustBase) {
         throw new AssertionError("'" + this.dirPath + "' must exist.", msg);
       }
     }
-  }, {
-    key: "have",
 
     /**
      * Checks whether the directory contains an entry.
@@ -772,6 +760,8 @@ var DirMust = (function (_DirMustBase) {
      * @param entries:string[]  The entry names.
      * @param [msg]:string      The assertion message.
      */
+  }, {
+    key: "have",
     value: function have(entries, msg) {
       //(1) arguments
       if (typeof entries == "string") entries = [entries];
@@ -785,30 +775,29 @@ var DirMust = (function (_DirMustBase) {
         }
       }
     }
-  }, {
-    key: "contain",
 
     /**
      * @alias have
      * @deprecated
      */
+  }, {
+    key: "contain",
     value: function contain() {
-      for (var _len9 = arguments.length, args = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-        args[_key9] = arguments[_key9];
-      }
-
-      this.have.apply(this, args);
+      this.have.apply(this, arguments);
+    }
+  }, {
+    key: "not",
+    get: function get() {
+      return new DirMustNot(this.dir);
     }
   }]);
 
   return DirMust;
 })(DirMustBase);
 
-/**
- * must.not.
- */
-
 var DirMustNot = (function (_DirMustBase2) {
+  _inherits(DirMustNot, _DirMustBase2);
+
   /**
    * Constructor.
    *
@@ -821,23 +810,19 @@ var DirMustNot = (function (_DirMustBase2) {
     _get(Object.getPrototypeOf(DirMustNot.prototype), "constructor", this).call(this, dir);
   }
 
-  _inherits(DirMustNot, _DirMustBase2);
+  /**
+   * Checks whether the directory doesn't exist.
+   *
+   * @param [msg]:string  The assertion error.
+   */
 
   _createClass(DirMustNot, [{
     key: "exist",
-
-    /**
-     * Checks whether the directory doesn't exist.
-     *
-     * @param [msg]:string  The assertion error.
-     */
     value: function exist(msg) {
       if (this.dir.exists()) {
         throw new AssertionError("'" + this.dirPath + "' must not exist.", msg);
       }
     }
-  }, {
-    key: "have",
 
     /**
      * Checks whether a directory doesn't contain an entry.
@@ -850,6 +835,8 @@ var DirMustNot = (function (_DirMustBase2) {
      * @param entries:string[]  The entry names.
      * @param [msg]:string      The assertion message.
      */
+  }, {
+    key: "have",
     value: function have(entries, msg) {
       //(1) arguments
       if (typeof entries == "string") entries = [entries];
@@ -863,19 +850,15 @@ var DirMustNot = (function (_DirMustBase2) {
         }
       }
     }
-  }, {
-    key: "contain",
 
     /**
      * @alias have
      * @deprecated
      */
+  }, {
+    key: "contain",
     value: function contain() {
-      for (var _len10 = arguments.length, args = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-        args[_key10] = arguments[_key10];
-      }
-
-      this.have.apply(this, args);
+      this.have.apply(this, arguments);
     }
   }]);
 

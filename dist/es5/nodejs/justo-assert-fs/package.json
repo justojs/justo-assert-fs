@@ -1,6 +1,6 @@
 {
   "name": "justo-assert-fs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Assertion library for files and directories.",
   "homepage": "http://www.justojs.org",
   "license": "MIT",
@@ -23,8 +23,6 @@
     "Assertion testing",
     "Browser test",
     "Browser testing",
-    "io.js test",
-    "io.js testing",
     "JavaScript test",
     "JavaScript testing",
     "Justo",
@@ -40,12 +38,12 @@
     "Unit testing"
   ],
   "bugs": {
-    "url": "https://github.com/JustoJS/justo-assert-file/issues",
+    "url": "https://github.com/justojs/justo-assert-file/issues",
     "email": "justojs.org@outlook.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/JustoJS/justo-assert-file.git"
+    "url": "https://github.com/justojs/justo-assert-file.git"
   },
   "engines": {
     "node": ">=0.12.0"

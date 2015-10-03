@@ -2,7 +2,7 @@
 
 An assertion library for files.
 
-*Proudly made in Valencia, Spain, EU.*
+*Proudly made with ♥ in Valencia, Spain, EU.*
 
 Features:
 
