@@ -4,23 +4,23 @@ module.exports = function(grunt) {
   // Project configuration
   grunt.initConfig({
     // Metadata
-    pkg: grunt.file.readJSON('package.json'),
-
-    banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-        '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-        '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-        '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= props.license %> */\n',
+    pkg: grunt.file.readJSON("package.json"),
 
     // Task configuration
     babel: {
       options: {
         sourceMap: false,
+        retainLines: true,
+        comments: false,
+        presets: ["es2015"]
       },
 
       es5: {
         files: {
-        	"build/es5/lib/index.js": "build/es5/lib/index.js"
+        	"build/es5/index.js": "index.js",
+          "build/es5/lib/AssertionError.js": "lib/AssertionError.js",
+          "build/es5/lib/Dir.js": "lib/Dir.js",
+          "build/es5/lib/File.js": "lib/File.js"
         }
       }
     },
@@ -31,28 +31,11 @@ module.exports = function(grunt) {
       }
     },
 
-    concat: {
-      options: {
-        separator: "\n\n"
-      },
-
-      preCompiler: {
-      	src: [
-          "lib/index.js",
-          "lib/AssertionError.js",
-          "lib/File.js",
-          "lib/Dir.js"
-        ],
-      	dest: "build/es5/lib/index.js"
-      }
-    },
-
     copy: {
     	nodejs: {
     		files: [
-    		  {cwd: "build/es5/", src: ["lib/index.js"], dest: "dist/es5/nodejs/<%= pkg.name %>/", expand: true},
-    		  {src: ["package.json", "README.md"], dest: "dist/es5/nodejs/<%= pkg.name %>/", expand: true},
-    		  {src: ["test/**/*.*"], dest: "dist/es5/nodejs/<%= pkg.name %>", expand: true}
+    		  {cwd: "build/es5/", src: ["index.js", "lib/*.js"], dest: "dist/es5/nodejs/<%= pkg.name %>/", expand: true},
+    		  {src: ["package.json", "README.md"], dest: "dist/es5/nodejs/<%= pkg.name %>/", expand: true}
     		]
     	}
     },
@@ -74,7 +57,7 @@ module.exports = function(grunt) {
         options: {
         	jshintrc: true,
           ignores: [
-            "test/unit/data/*",
+            "test/unit/data/**/*.*"
           ]
         },
 
@@ -98,7 +81,8 @@ module.exports = function(grunt) {
         },
 
         src: [
-          "test/unit/**/*.js"
+          "test/unit/index.js",
+          "test/unit/lib/**/*.js"
         ]
       }
     }
@@ -107,15 +91,13 @@ module.exports = function(grunt) {
   // These plugins provide necessary tasks
   grunt.loadNpmTasks("grunt-babel");
   grunt.loadNpmTasks("grunt-contrib-clean");
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks("grunt-contrib-copy");
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-mocha-test");
   grunt.loadNpmTasks("grunt-travis-lint");
 
   //aliases
-  grunt.registerTask("buildes5", ["travis-lint", "jshint", "clean:es5", "concat:preCompiler", "babel:es5", "copy:nodejs"]);
+  grunt.registerTask("buildes5", ["travis-lint", "jshint", "clean:es5", "babel:es5", "copy:nodejs"]);
   grunt.registerTask("test", ["mochaTest:es5"]);
   grunt.registerTask("es5", ["buildes5", "test"]);
 

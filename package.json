@@ -1,18 +1,17 @@
 {
   "name": "justo-assert-fs",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "description": "Assertion library for files and directories.",
   "homepage": "http://www.justojs.org",
-  "license": "MIT",
   "author": {
-    "name": "The Justo.js Development Group",
-    "email": "justojs.org@outlook.com",
+    "name": "Justo Labs",
+    "email": "justojs@justolabs.com",
     "url": "http://www.justojs.org"
   },
   "contributors": [
     {
       "name": "Raúl G. González",
-      "email": "raulggonzalezsw@outlook.com",
+      "email": "raulggonzalez@justojs.org",
       "url": ""
     }
   ],
@@ -21,8 +20,6 @@
     "assert file",
     "Assertion test",
     "Assertion testing",
-    "Browser test",
-    "Browser testing",
     "JavaScript test",
     "JavaScript testing",
     "Justo",
@@ -39,7 +36,7 @@
   ],
   "bugs": {
     "url": "https://github.com/justojs/justo-assert-file/issues",
-    "email": "justojs.org@outlook.com"
+    "email": "issues@justojs.org"
   },
   "repository": {
     "type": "git",
@@ -49,25 +46,24 @@
     "node": ">=0.12.0"
   },
   "dependencies": {
-    "js-yaml": "^3.3.0",
-    "jsonfile": "^2.0.0"
+    "js-yaml": "*",
+    "jsonfile": "*"
   },
   "peerDependencies": {},
   "devDependencies": {
+    "babel-preset-es2015": "*",
     "grunt": "^0.4.5",
     "grunt-babel": "*",
     "grunt-contrib-clean": "*",
-    "grunt-contrib-concat": "*",
     "grunt-contrib-copy": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-uglify": "*",
     "grunt-mocha-test": "*",
     "grunt-travis-lint": "*",
     "justo-assert": "*",
     "mocha": "*"
   },
   "preferGlobal": false,
-  "main": "lib/index.js",
+  "main": "index.js",
   "files": [
     "lib",
     "test"

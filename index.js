@@ -1,5 +1,7 @@
 //imports
-const path = require("path");
+import path from "path";
+import File from "./lib/File";
+import Dir from "./lib/Dir";
 
 /**
  * Creates a file wrapper for asserting.
